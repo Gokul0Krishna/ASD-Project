@@ -8,7 +8,7 @@ model=Model()
 rcog,screen_height,screen_width = model.initialize_model(num_of_hands=1,confidence_score=0.7)
 cap = cv2.VideoCapture(0)
 prev_x, prev_y = 0, 0
-click_threshold = 30
+click_threshold = 15
 smoothening = 3
 click_down = True
 while True:
@@ -25,7 +25,8 @@ while True:
             # Extract coordinates
             lm = hand_landmarks.landmark
             index_finger = lm[8]  # index tip
-            thumb = lm[4] 
+            thumb = lm[4]
+            pinky = lm[16] 
             x = int(index_finger.x * w)
             y = int(index_finger.y * h)
 
@@ -40,11 +41,14 @@ while True:
             prev_x, prev_y = cur_x, cur_y
             
             thumb_x, thumb_y = int(thumb.x * w), int(thumb.y * h)
+            pinky_x, pinky_y = int(pinky.x * w), int(pinky.y * h)
 
             cv2.circle(frame, (x, y), 10, (255, 0, 0), -1)
             cv2.circle(frame, (thumb_x, thumb_y), 10, (0, 255, 0), -1)
-            cv2.line(frame, (x, y), (thumb_x, thumb_y), (255, 255, 0), 2)
-            distance = np.hypot(x - thumb_x, y - thumb_y)
+            cv2.circle(frame, (pinky_x, pinky_y), 10, (0, 255, 0), -1)
+            # cv2.line(frame, (x, y), (thumb_x, thumb_y), (255, 255, 0), 2)
+            cv2.line(frame, (thumb_x, thumb_y), (pinky_x, pinky_y), (255, 255, 0), 2)
+            distance = np.hypot(pinky_x - thumb_x, pinky_y - thumb_y)
 
             if distance < click_threshold:
                 if not click_down:
@@ -54,8 +58,6 @@ while True:
             else:
                 click_down = False
 
-            # Draw landmarks
-            # model.draw_landmarks(frame, hand_landmarks, model.HAND_CONNECTIONS)
 
     cv2.imshow('Virtual Mouse', frame)
     if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to quit
