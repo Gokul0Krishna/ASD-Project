@@ -41,7 +41,26 @@ class Fuck():
         cv2.circle(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), 10, (0, 255, 0), -1)
         cv2.line(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), (int(self.ring.x*w),int(self.ring.y*h)), (255, 255, 0), 2)
         cv2.line(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), (int(self.pinky.x*w),int(self.pinky.y*h)), (255, 255, 0), 2)
+        cv2.line(frame, (int(self.wrist.x*w),int(self.wrist.y*h)), (int(self.ring.x*w),int(self.ring.y*h)), (255, 255, 0), 2)
 
+
+
+    def click(self):
+        distance = np.hypot(int(self.thumb.x*w) - int(self.ring.x*w), int(self.thumb.y*h) - int(self.ring.y*h))    
+        if distance < 20:
+            pyautogui.click()
+            print('click')
+
+    def right_click(self):
+        distance = np.hypot(int(self.thumb.x*w) - int(self.pinky.x*w), int(self.thumb.y*h) - int(self.pinky.y*h))    
+        if distance < 20:
+            pyautogui.rightClick()
+            print('right_click')
+
+    def switch_tab(self):
+        distance = np.hypot(int(self.wrist.x*w) - int(self.ring.x*w), int(self.wrist.y*h) - int(self.ring.y*h))    
+        if distance < 20:
+            pyautogui.hotkey('ctrl', 'tab')
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
@@ -57,6 +76,8 @@ if __name__ == '__main__':
         if value:
             cor_x, cor_y = obj.move(h=h,w=w,prev_x=cor_x,prev_y=cor_y)
             obj.show(frame=rgb)
+            obj.click()
+            obj.right_click()
         
         cv2.imshow('Virtual Mouse', rgb)
         
