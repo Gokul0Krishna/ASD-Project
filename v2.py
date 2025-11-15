@@ -38,8 +38,9 @@ class Fuck():
 
     def show(self,frame):
         cv2.circle(frame, (int((int(self.index_finger.x*w)+int(self.middle_finger.x*w))/2),int((int(self.index_finger.y*h)+int(self.middle_finger.y*h))/2)), 10, (0, 255, 0), -1)
-        cv2.circle(frame, (int(self.thumb.x*h),int(self.thumb.y*w)), 10, (0, 255, 0), -1)
-        # cv2.line(frame, (thumb_x, thumb_y), (ring_x, ring_y), (255, 255, 0), 2)
+        cv2.circle(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), 10, (0, 255, 0), -1)
+        cv2.line(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), (int(self.ring.x*w),int(self.ring.y*h)), (255, 255, 0), 2)
+        cv2.line(frame, (int(self.thumb.x*w),int(self.thumb.y*h)), (int(self.pinky.x*w),int(self.pinky.y*h)), (255, 255, 0), 2)
 
 
 if __name__ == '__main__':
@@ -52,12 +53,13 @@ if __name__ == '__main__':
         frame = cv2.flip(frame, 1) 
         h, w, _ = frame.shape
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        cv2.imshow('Virtual Mouse', rgb)
         value = obj.detect(h=h,w=w)
         if value:
             cor_x, cor_y = obj.move(h=h,w=w,prev_x=cor_x,prev_y=cor_y)
             obj.show(frame=rgb)
-
+        
+        cv2.imshow('Virtual Mouse', rgb)
+        
         if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to quit
                 break
 
