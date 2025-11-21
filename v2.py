@@ -47,13 +47,13 @@ class Fuck():
 
     def click(self,h,w):
         distance = np.hypot(int(self.thumb.x*w) - int(self.ring.x*w), int(self.thumb.y*h) - int(self.ring.y*h))    
-        if distance < 20:
+        if distance < 45:
             pyautogui.click()
             print('click')
 
     def right_click(self,h,w):
         distance = np.hypot(int(self.thumb.x*w) - int(self.pinky.x*w), int(self.thumb.y*h) - int(self.pinky.y*h))    
-        if distance < 20:
+        if distance < 45:
             pyautogui.rightClick()
             print('right_click')
 
